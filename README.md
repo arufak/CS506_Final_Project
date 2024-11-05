@@ -17,7 +17,46 @@ The goal of this project is to develop a movie recommendation system that dynami
 - **Movie Data**: Collected from the TMDB API, providing information on genres, ratings, release dates, and user reviews of movies. This data will be used to create movie recommendations based on the current weather.
 
 ## Data Cleaning
-The collected data will be pre-processed to handle missing values, inconsistencies, and irrelevant information. The weather data will be standardized to ensure uniformity, and only relevant movie information (genre, ratings) will be extracted and cleaned from TMDB API responses.
+Here’s a detailed description of the data processing steps based on the information from the notebook:
+
+---
+
+## Data Processing
+
+- **Loading and Initial Inspection**: The dataset was loaded and reviewed for duplicates, missing values, and invalid entries, which helped identify the scope of cleaning required.
+
+- **Duplicate Removal**: Duplicate entries based on the `id` column were removed to ensure each movie entry was unique.
+
+- **Numerical Data Cleaning**:
+  - Columns like `vote_average`, `vote_count`, `revenue`, `runtime`, and `popularity` were converted to numeric types. Missing or non-numeric entries were set to `NaN` and filled based on data distribution (e.g., median).
+  - A custom `vote_score` was calculated using a weighted rating formula, considering the average votes and a threshold on vote count for accuracy.
+
+- **Date Processing**:
+  - The `release_date` column was standardized to a datetime format, with invalid dates set to `NaN`.
+  - New columns were created: `release_year` and `release_month`, which helped categorize movies by release year and month. Missing years were filled as `-1`.
+
+- **Text Field Cleaning**:
+  - Columns like `title`, `overview`, `tagline`, and `original_title` were stripped of leading/trailing spaces, and missing values were replaced with empty strings to standardize text data.
+
+- **Genre Extraction and Encoding**:
+  - A new `genres_list` column was created by splitting genre strings into lists for easier access.
+  - Genre-specific dummy variables were generated for each unique genre, making genres compatible with modeling.
+
+- **Production Companies and Languages**:
+  - Counts for production companies and languages were added, allowing insights into the diversity of production and language scope for each movie.
+  - A binary `is_english` column was created to flag English-language films, while `is_hollywood` indicated whether a movie was produced in the United States.
+
+- **Revenue and Budget Levels**:
+  - Revenue values were categorized into custom budget levels (e.g., `very_low`, `low`, `medium`, `high`, `very_high`), enabling budget-based analysis. Missing values were filled as zero.
+
+- **Additional Features**:
+  - Calculated `movie_age` as the difference between the current year and the `release_year`, aiding in understanding the dataset's time-based trends.
+  - Count columns were added for keywords, genres, production companies, and languages, giving numerical representation to these categorical fields.
+  - A `is_released` flag marked movies as released or not, standardizing the dataset based on release status.
+
+- **Filtering for Clean Data**:
+  - Entries marked as `adult` were removed, ensuring the dataset was family-friendly.
+  - The final cleaning report highlighted data metrics post-cleaning, such as average vote score, median runtime, and movies count by decade.
 
 ## Feature Extraction
 - **Weather Features**: Weather conditions such as "rainy", "sunny", "snowy", "cloudy", and temperature ranges will be extracted and categorized for use in the recommendation model.
