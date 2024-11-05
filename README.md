@@ -16,13 +16,7 @@ The goal of this project is to develop a movie recommendation system that dynami
 - **Weather Data**: Collected from the OpenWeather API, which provides real-time weather information such as temperature, humidity, and weather conditions (e.g., rainy, sunny, cloudy).
 - **Movie Data**: Collected from the TMDB API, providing information on genres, ratings, release dates, and user reviews of movies. This data will be used to create movie recommendations based on the current weather.
 
-## Data Cleaning
-Here’s a detailed description of the data processing steps based on the information from the notebook:
-
----
-
-## Data Processing
-
+## Data Cleaning and Processing
 - **Loading and Initial Inspection**: The dataset was loaded and reviewed for duplicates, missing values, and invalid entries, which helped identify the scope of cleaning required.
 
 - **Duplicate Removal**: Duplicate entries based on the `id` column were removed to ensure each movie entry was unique.
