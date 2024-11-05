@@ -23,9 +23,34 @@ The collected data will be pre-processed to handle missing values, inconsistenci
 - **Weather Features**: Weather conditions such as "rainy", "sunny", "snowy", "cloudy", and temperature ranges will be extracted and categorized for use in the recommendation model.
 - **Movie Features**: Movies will be grouped based on genre, popularity, and viewer ratings to associate specific movies with weather conditions.
 
-## Data Visualization
-- **Bar Charts**: A key visual will show the distribution of recommended movie genres for different weather conditions, highlighting patterns (e.g., comedy for sunny weather, drama for rainy weather).
-- **Time-Series Plots**: Weather patterns over time will be plotted alongside trends in movie recommendations to analyze how seasonal or long-term weather changes influence the type of movies recommended.
+## Preliminary Data Visualization
+Here’s the README section in plain text for easier copy-pasting:
+
+---
+
+## Preliminary Visualizations of Data
+
+### Weather Influence on Genre Choice  
+- **Visualization**: This pie chart answers the question, “Does the weather affect what genre of movie you watch?” The chart provides a clear breakdown, showing the percentage of individuals who consider weather when choosing a movie genre versus those who do not.  
+- **Insight**: Preliminary responses reveal a trend where weather appears to influence movie-watching habits, providing a basis for analyzing genre preferences across different weather conditions.  
+
+### Genre Preferences by Weather Condition  
+- **Visualization**: Multiple bar charts illustrate the distribution of popular movie genres (e.g., action, comedy, drama) watched under specific weather conditions:  
+    - **Sunny (Summer)**: Displays genre preferences in sunny or warm weather.  
+    - **Rainy**: Highlights genres chosen when it’s raining, suggesting certain movies might be preferred in rainy conditions.  
+    - **Snowy (Winter)**: Shows genres preferred during winter or snowy weather, potentially aligning with holiday or seasonal themes.  
+    - **Cloudy/Overcast**: Explores genre choices during cloudy weather, revealing preferences for neutral weather conditions.  
+    - **Storm/Lightning**: Observes genre selection during stormy weather, identifying potential patterns for more intense weather scenarios.  
+- **Insight**: These visualizations suggest that weather conditions may correlate with certain genre preferences, helping identify trends that could support a recommendation model based on real-time weather.  
+
+### Genre Count by Release Month  
+- **Visualization**: A bar graph shows the count of movie releases by genre for each month, providing insight into seasonal trends. For example, family movies may peak in December, aligning with holiday releases, or summer action blockbusters might see more releases around mid-year.  
+- **Insight**: This visualization indicates that certain genres are associated with specific times of the year, showing potential seasonality in movie releases. Understanding these trends can support models that recommend movies based on time-of-year preferences.  
+
+### Release Date Analysis  
+- **Data Filtering**: To ensure data accuracy, release dates are converted to a standardized datetime format, and invalid dates are removed. The data is filtered to include releases between 1900 and 2024.  
+- **Visualization**: A breakdown by month of release reveals historical trends, allowing for a more granular look at genre popularity across different times.  
+- **Insight**: Data filtering and date analysis ensure clean, relevant data, enabling an exploration of time-based trends in movie genres. This can help in predicting popular genres throughout the year.  
 
 ## Modeling
 The recommendation system will be built using scikit-learn. It will be trained on historical weather and movie data to map specific weather conditions to appropriate movie genres (e.g., cozy movies for rainy days, action-packed movies for sunny days). We may explore clustering or decision tree models to analyze patterns in the data.
