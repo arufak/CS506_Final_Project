@@ -56,13 +56,7 @@ The goal of this project is to develop a movie recommendation system that dynami
 - **Weather Features**: Weather conditions such as "rainy", "sunny", "snowy", "cloudy", and temperature ranges will be extracted and categorized for use in the recommendation model.
 - **Movie Features**: Movies will be grouped based on genre, popularity, and viewer ratings to associate specific movies with weather conditions.
 
-## Preliminary Data Visualization
-Here’s the README section in plain text for easier copy-pasting:
-
----
-
 ## Preliminary Visualizations of Data
-
 ### Weather Influence on Genre Choice  
 - **Visualization**: This pie chart answers the question, “Does the weather affect what genre of movie you watch?” The chart provides a clear breakdown, showing the percentage of individuals who consider weather when choosing a movie genre versus those who do not.  
 - **Insight**: Preliminary responses reveal a trend where weather appears to influence movie-watching habits, providing a basis for analyzing genre preferences across different weather conditions.  
@@ -85,8 +79,57 @@ Here’s the README section in plain text for easier copy-pasting:
 - **Visualization**: A breakdown by month of release reveals historical trends, allowing for a more granular look at genre popularity across different times.  
 - **Insight**: Data filtering and date analysis ensure clean, relevant data, enabling an exploration of time-based trends in movie genres. This can help in predicting popular genres throughout the year.  
 
-## Modeling
-The recommendation system will be built using scikit-learn. It will be trained on historical weather and movie data to map specific weather conditions to appropriate movie genres (e.g., cozy movies for rainy days, action-packed movies for sunny days). We may explore clustering or decision tree models to analyze patterns in the data.
+## Data Modeling Methods
+### Clustering Model: K-Means
+- **Purpose**: To group movies into clusters that align with specific weather conditions (e.g., adventure movies for sunny days, dramas for rainy days).
+- **Method**: Using selected features (such as `vote_average`, `popularity`, `runtime`, and genre dummy variables), a K-Means algorithm was trained with five clusters to represent different weather categories.
+- **Weather Mapping**: Each weather type is mapped to certain clusters:
+  - *Sunny*: Clusters with movies that are upbeat or adventurous.
+  - *Rainy*: Clusters featuring dramatic or introspective films.
+  - *Stormy*: Clusters with intense, thrilling genres.
+- **Outcome**: This clustering provides recommendations by associating specific clusters with weather conditions.
+
+### Collaborative Filtering Model: Nearest Neighbors
+- **Purpose**: To recommend similar movies based on feature similarity, leveraging collaborative filtering to provide recommendations for each weather type.
+- **Method**: The Nearest Neighbors model (with cosine similarity) was trained using the feature matrix. This model finds movies that are similar to a representative movie chosen based on each weather condition.
+- **Representative Movie Selection**: A seed movie representing each weather condition is selected based on relevant genre tags (e.g., *comedy* for sunny weather, *drama* for rainy weather).
+- **Outcome**: The model generates recommendations by finding movies with similar attributes to the seed movie, based on the target weather.
+
+### Matrix Factorization Model: Non-negative Matrix Factorization (NMF)
+- **Purpose**: To uncover latent features within the genre matrix, identifying underlying patterns that correspond to different weather conditions.
+- **Method**: Using genre columns, NMF was applied to extract 10 latent components. Each component represents a blend of genres or attributes that correlate with specific weather preferences.
+- **Weather Components**: Each weather type is mapped to relevant components:
+  - *Sunny*: Components associated with upbeat or light-hearted genres.
+  - *Rainy*: Components tied to dramatic or emotional genres.
+  - *Stormy*: Components reflecting intense or thriller genres.
+- **Outcome**: This model provides recommendations by analyzing these latent components and scoring movies based on their alignment with weather-related patterns.
+
+### Ensemble Recommendation Approach
+- **Purpose**: To enhance recommendation robustness by combining outputs from the clustering, collaborative filtering, and matrix factorization models.
+- **Method**: Recommendations from each model are aggregated, with movies appearing in multiple model outputs given higher priority.
+- **Outcome**: This ensemble method ensures that recommendations align more closely with each weather condition by synthesizing insights across multiple models.
+
+## Preliminary Results
+- **Clustering Model (K-Means)**: The K-Means clustering model successfully grouped movies into clusters that align with different weather conditions. Each cluster shows distinct genre preferences:
+  - *Sunny* clusters contain upbeat and adventure genres.
+  - *Rainy* clusters show a higher concentration of drama and romance movies.
+  - *Stormy* clusters primarily include thrillers and intense genres.
+  - **Result**: This pattern supports our hypothesis that different weather conditions influence genre preferences, validating the effectiveness of clustering for weather-based recommendations.
+
+- **Collaborative Filtering (Nearest Neighbors)**: The collaborative filtering model effectively identified movies similar to weather-representative movies using cosine similarity.
+  - *Sunny*: Similar movies to popular comedies and family films.
+  - *Rainy*: Recommendations tend to focus on dramas and romantic movies.
+  - *Stormy*: Recommendations include thrillers and sci-fi movies, suitable for stormy weather.
+  - **Result**: This approach confirms the value of using collaborative filtering to provide recommendations based on weather-related moods.
+
+- **Matrix Factorization (NMF)**: By extracting latent factors from the genre matrix, the NMF model identified underlying patterns that align with weather types.
+  - *Sunny*: Latent factors associated with genres like comedy and family.
+  - *Rainy*: Factors linked with more emotional or dramatic genres.
+  - *Stormy*: Factors representing thrillers and darker themes.
+  - **Result**: The NMF model successfully highlights genre associations that correspond with different weather patterns, providing a new layer of insights for tailored recommendations.
+
+- **Ensemble Approach**: The ensemble method, combining outputs from all three models, provides robust recommendations that align well with each weather condition.
+  - **Result**: This blended approach ensures high-quality recommendations by leveraging the strengths of each individual model.
 
 ## Test Plan
 We plan to split our dataset into training (80%) and test (20%) sets. This approach will allow us to test the recommendation system's performance on unseen data and tune the model based on the results. The model will be evaluated using accuracy metrics and user feedback (if applicable) on movie recommendations for varying weather conditions.
