@@ -17,6 +17,15 @@ The goal of this project is to develop a movie recommendation system that dynami
 ## Data Collection
 - **Weather Data**: Collected from the OpenWeather API, which provides real-time weather information such as temperature, humidity, and weather conditions (e.g., rainy, sunny, cloudy).
 - **Movie Data**: We used a movie dataset from Kaggle, collected from the TMDB API, containing information on over 1 million movies from around the world. This dataset provides detailed information on genres, ratings, release dates, and user reviews, allowing us to analyze diverse movie characteristics to create recommendations tailored to various weather conditions.
+- **User Response**: We gathered some user insight in whether users say that the weather affects their choice in movie genre. We asked the following questions to users: 
+  1. Does the weather affect what genre of movie you watch?
+  2. From a choice of these gneres: 
+
+      Action, Comedy, Drama, Sci-Fi, Horror, Romance, Documentary, Animation, Thriller, Adventure, and Musical
+
+      which genres whould you perfer to watch when it is Sunny, Rainy, Snowy, Cloudy/Overcast, and Storming/Lightning?
+
+  We then then took the responces from our questoneer and converted it into a csv. 
 
 ## Data Cleaning and Processing
 - **Loading and Initial Inspection**: The dataset was loaded and reviewed for duplicates, missing values, and invalid entries, which helped identify the scope of cleaning required.
@@ -61,25 +70,44 @@ The goal of this project is to develop a movie recommendation system that dynami
 ## Preliminary Visualizations of Data
 ### Weather Influence on Genre Choice  
 - **Visualization**: This pie chart answers the question, “Does the weather affect what genre of movie you watch?” The chart provides a clear breakdown, showing the percentage of individuals who consider weather when choosing a movie genre versus those who do not.  
-- **Insight**: Preliminary responses reveal a trend where weather appears to influence movie-watching habits, providing a basis for analyzing genre preferences across different weather conditions.  
+- **Insight**: Preliminary responses reveal a trend where weather appears to influence movie-watching habits, providing a basis for analyzing genre preferences across different weather conditions.
+  
+  ![pie chart](/images/pie_chart_weather_affect_q.png)
+
 
 ### Genre Preferences by Weather Condition  
 - **Visualization**: Multiple bar charts illustrate the distribution of popular movie genres (e.g., action, comedy, drama) watched under specific weather conditions:  
     - **Sunny (Summer)**: Displays genre preferences in sunny or warm weather.  
+  
+      ![sunny](/images/sunny_bar_graph.png)
     - **Rainy**: Highlights genres chosen when it’s raining, suggesting certain movies might be preferred in rainy conditions.  
-    - **Snowy (Winter)**: Shows genres preferred during winter or snowy weather, potentially aligning with holiday or seasonal themes.  
-    - **Cloudy/Overcast**: Explores genre choices during cloudy weather, revealing preferences for neutral weather conditions.  
-    - **Storm/Lightning**: Observes genre selection during stormy weather, identifying potential patterns for more intense weather scenarios.  
+  
+      ![rain](/images/rain_bar_graph.png)
+    - **Snowy (Winter)**: Shows genres preferred during winter or snowy weather, potentially aligning with holiday or seasonal themes. 
+  
+      ![smowy](/images/snow_bar_graph.png) 
+    - **Cloudy/Overcast**: Explores genre choices during cloudy weather, revealing preferences for neutral weather conditions.
+   
+      ![cloudy](/images/cloudy_bar_graph.png) 
+    - **Storm/Lightning**: Observes genre selection during stormy weather, identifying potential patterns for more intense weather scenarios.
+  
+      ![lightning](/images/storm_bar_graph.png)  
 - **Insight**: These visualizations suggest that weather conditions may correlate with certain genre preferences, helping identify trends that could support a recommendation model based on real-time weather.  
 
 ### Genre Count by Release Month  
 - **Visualization**: A bar graph shows the count of movie releases by genre for each month, providing insight into seasonal trends. For example, family movies may peak in December, aligning with holiday releases, or summer action blockbusters might see more releases around mid-year.  
-- **Insight**: This visualization indicates that certain genres are associated with specific times of the year, showing potential seasonality in movie releases. Understanding these trends can support models that recommend movies based on time-of-year preferences.  
+- **Insight**: This visualization indicates that certain genres are associated with specific times of the year, showing potential seasonality in movie releases. Understanding these trends can support models that recommend movies based on time-of-year preferences.
+
+  ![genre count per month](images/bar_graph_genre_count_by_month.png)  
 
 ### Release Date Analysis  
 - **Data Filtering**: To ensure data accuracy, release dates are converted to a standardized datetime format, and invalid dates are removed. The data is filtered to include releases between 1900 and 2024.  
 - **Visualization**: A breakdown by month of release reveals historical trends, allowing for a more granular look at genre popularity across different times.  
-- **Insight**: Data filtering and date analysis ensure clean, relevant data, enabling an exploration of time-based trends in movie genres. This can help in predicting popular genres throughout the year.  
+- **Insight**: Data filtering and date analysis ensure clean, relevant data, enabling an exploration of time-based trends in movie genres. This can help in predicting popular genres throughout the year. However, since we only have the release date of these movies, and not the date of when users are watching at home, we cannot rely too heavily on the date since it only tells us when the movie was released (and connsequently when it was in theaters).  
+- We created multiple graphs that compare the release date with other information from the movie data, below is an example of one fo those graphs, where we are comparing the release date month by the total vote count. 
+  
+  ![genre count per month](images/vote_count_by_month.png) 
+   
 
 ## Data Modeling Methods
 ### Clustering Model: K-Means
