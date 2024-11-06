@@ -70,15 +70,15 @@ The goal of this project is to develop a movie recommendation system that dynami
 ## Preliminary Visualizations of Data
 ### Weather Influence on Genre Choice  
 - **Visualization**: This pie chart answers the question, “Does the weather affect what genre of movie you watch?” The chart provides a clear breakdown, showing the percentage of individuals who consider weather when choosing a movie genre versus those who do not.  
+
 - **Insight**: Preliminary responses reveal a trend where weather appears to influence movie-watching habits, providing a basis for analyzing genre preferences across different weather conditions.
   
   ![pie chart](/images/pie_chart_weather_affect_q.png)
 
-
 ### Genre Preferences by Weather Condition  
 - **Visualization**: Multiple bar charts illustrate the distribution of popular movie genres (e.g., action, comedy, drama) watched under specific weather conditions:  
     - **Sunny (Summer)**: Displays genre preferences in sunny or warm weather.  
-  
+    
       ![sunny](/images/sunny_bar_graph.png)
     - **Rainy**: Highlights genres chosen when it’s raining, suggesting certain movies might be preferred in rainy conditions.  
   
@@ -92,6 +92,7 @@ The goal of this project is to develop a movie recommendation system that dynami
     - **Storm/Lightning**: Observes genre selection during stormy weather, identifying potential patterns for more intense weather scenarios.
   
       ![lightning](/images/storm_bar_graph.png)  
+
 - **Insight**: These visualizations suggest that weather conditions may correlate with certain genre preferences, helping identify trends that could support a recommendation model based on real-time weather.  
 
 ### Genre Count by Release Month  
@@ -108,7 +109,6 @@ The goal of this project is to develop a movie recommendation system that dynami
   
   ![genre count per month](images/vote_count_by_month.png) 
    
-
 ## Data Modeling Methods
 ### Clustering Model: K-Means
 - **Purpose**: To group movies into clusters that align with specific weather conditions (e.g., adventure movies for sunny days, dramas for rainy days).
