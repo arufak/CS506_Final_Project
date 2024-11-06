@@ -104,8 +104,8 @@ The goal of this project is to develop a movie recommendation system that dynami
 ### Release Date Analysis  
 - **Data Filtering**: To ensure data accuracy, release dates are converted to a standardized datetime format, and invalid dates are removed. The data is filtered to include releases between 1900 and 2024.  
 - **Visualization**: A breakdown by month of release reveals historical trends, allowing for a more granular look at genre popularity across different times.  
-- **Insight**: Data filtering and date analysis ensure clean, relevant data, enabling an exploration of time-based trends in movie genres. This can help in predicting popular genres throughout the year. However, since we only have the release date of these movies, and not the date of when users are watching at home, we cannot rely too heavily on the date since it only tells us when the movie was released (and connsequently when it was in theaters).  
-- We created multiple graphs that compare the release date with other information from the movie data, below is an example of one fo those graphs, where we are comparing the release date month by the total vote count. 
+- **Insight**: Data filtering and date analysis ensure clean, relevant data, enabling an exploration of time-based trends in movie genres. This can help in predicting popular genres throughout the year. However, since we only have the release date of these movies, and not the date of when users are watching at home, we cannot rely too heavily on the date since it only tells us when the movie was released (and consequently when it was in theaters).  
+- We created multiple graphs that compare the release date with other information from the movie data, below is an example of one of those graphs, where we are comparing the release date month by the total vote count. 
   
   ![genre count per month](images/vote_count_by_month.png) 
    
