@@ -99,20 +99,31 @@ def get_movie_details(title):
                 return {"actors": actors, "director": {"name": director["name"]} if director else None}
     return {"actors": [], "director": None}
 
+@app.route('/genres')
+def get_genres():
+    url = f"https://api.themoviedb.org/3/genre/movie/list?api_key={api_key_movie}&language=en-US"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        return jsonify(data['genres'])
+    else:
+        return jsonify({'error': 'Failed to fetch genres'}), response.status_code
+
 @app.route('/movies')
 def movies():
     genre = request.args.get('genre')
-    genre_map = {
-        'drama': 18,
-        'thriller': 53,
-        'comedy': 35
-    }
-    genre_id = genre_map.get(genre.lower())
-    if genre_id:
-        movies = get_movies_by_genre(genre_id)
-        return jsonify(movies)
+    genres_response = requests.get(f"https://api.themoviedb.org/3/genre/movie/list?api_key={api_key_movie}&language=en-US")
+    if genres_response.status_code == 200:
+        genres_data = genres_response.json()
+        genre_map = {g['name'].lower(): g['id'] for g in genres_data['genres']}
+        genre_id = genre_map.get(genre.lower())
+        if genre_id:
+            movies = get_movies_by_genre(genre_id)
+            return jsonify(movies)
+        else:
+            return jsonify({'error': 'Invalid genre'}), 400
     else:
-        return jsonify({'error': 'Invalid genre'}), 400
+        return jsonify({'error': 'Failed to fetch genres'}), genres_response.status_code
 
 @app.route('/movie-details')
 def movie_details():
