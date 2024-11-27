@@ -1,3 +1,5 @@
 *.psd filter=lfs diff=lfs merge=lfs -text
 .csv filter=lfs diff=lfs merge=lfs -text
 *.csv filter=lfs diff=lfs merge=lfs -text
+.csv !text !filter !merge !diff
+data/Movie[[:space:]]Genre[[:space:]]based[[:space:]]on[[:space:]]Weather[[:space:]](Responses)[[:space:]]-[[:space:]]Form[[:space:]]Responses[[:space:]]1.csv !text !filter !merge !diff
