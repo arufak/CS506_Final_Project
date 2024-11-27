@@ -209,12 +209,47 @@ body {
     align-items: center;
 }
 
-.movie-poster img {
+#modal-poster {
     width: 100%;
     height: auto;
-    max-width: 500px; /* Adjust as needed */
-    max-height: 700px; /* Adjust as needed */
+    max-width: 400px; /* Adjusted size */
+    max-height: 600px; /* Adjusted size */
     object-fit: cover;
+}
+
+@media (max-width: 1200px) {
+    #modal-poster {
+        max-width: 350px;
+        max-height: 525px;
+    }
+}
+
+@media (max-width: 992px) {
+    #modal-poster {
+        max-width: 300px;
+        max-height: 450px;
+    }
+}
+
+@media (max-width: 768px) {
+    #modal-poster {
+        max-width: 250px;
+        max-height: 375px;
+    }
+}
+
+@media (max-width: 676px) {
+    #modal-poster {
+        max-width: 200px;
+        max-height: 300px;
+    }
+}
+
+@media (max-width: 500px) {
+    #modal-poster {
+        max-width: 100px;
+        max-height: 150px;
+    }
 }
 
 .movie-info {
