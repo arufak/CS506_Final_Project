@@ -224,11 +224,12 @@ function updateBackground(iconCode, description) {
 
     function openModal(title, description, poster) {
         console.log(`Modal data: ${title}, ${description}, ${poster}`);
-        const moviePoster = modal.querySelector(".movie-poster");
+        const moviePoster = modal.querySelector("#modal-poster");
         const movieInfo = modal.querySelector(".movie-info");
 
         if (moviePoster && movieInfo) {
-            moviePoster.innerHTML = `<img src="${poster}" alt="${title}">`;
+            moviePoster.src = poster;
+            moviePoster.alt = title;
             movieInfo.innerHTML = `
                 <h2>${title}</h2>
                 <p>${description}</p>
