@@ -2,3 +2,5 @@ Flask
 numpy
 matplotlib
 scikit-learn
+requests
+pycountry

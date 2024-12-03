@@ -116,13 +116,13 @@ function getHourlyWeatherData(data) {
 
 function updateBackground(iconCode, description) {
     const images = {
-        clear: 'https://images.pexels.com/photos/681336/pexels-photo-681336.jpeg',
-        cloudy: 'INSERT_URL',
-        rainy: 'INSERT_URL',
-        stormy: 'INSERT_URL',
-        snowy: 'INSERT_URL',
-        foggy: 'INSERT_URL',
-        default: 'INSERT_URL'
+        clear: 'https://images.pexels.com/photos/789152/pexels-photo-789152.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        cloudy: 'https://images.pexels.com/photos/19670/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        rainy: 'https://images.pexels.com/photos/1154510/pexels-photo-1154510.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        stormy: 'https://images.pexels.com/photos/1102915/pexels-photo-1102915.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        snowy: 'https://images.pexels.com/photos/1853384/pexels-photo-1853384.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        foggy: 'https://images.pexels.com/photos/978844/pexels-photo-978844.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        default: 'https://images.pexels.com/photos/13695339/pexels-photo-13695339.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
     };
 
     const timeOfDay = iconCode.endsWith('d') ? 'Day' : 'Night';
@@ -131,17 +131,6 @@ function updateBackground(iconCode, description) {
     const backgroundImage = images[weatherCondition] || images.Default;
     weatherBackground.style.backgroundImage = `url(${backgroundImage})`;
 }
-
-    // Weather Background
-    // const weatherBackground = document.getElementById('weather-background');
-    // if (weatherBackground) {
-    //     const weatherCondition = "Sunny"; // Placeholder
-    //     const images = {
-    //         Sunny: 'https://images.pexels.com/photos/681336/pexels-photo-681336.jpeg',
-    //         Rainy: 'https://images.pexels.com/photos/688830/pexels-photo-688830.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    //     };
-    //     weatherBackground.style.backgroundImage = `url(${images[weatherCondition] || images.Sunny})`;
-    // }
 
     // Temperature Slider
     const tempSlider = document.querySelector('.temperature-slider input');
