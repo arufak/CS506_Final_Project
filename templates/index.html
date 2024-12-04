@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../static/styles.css">
+    <title>Movie Recommendations | CS506 Final Project</title>
+</head>
+<body>
+
+    <div id="weather-widget">
+        <div class="weather-info">
+            <div class="weather-icon">🌤️</div>
+            <div class="weather-details">
+                <span id="weather-description">The weather is Sunny in Boston, MA</span>
+            </div>
+            <div class="divider">|</div>
+            <div class="temperature-slider">
+                <span>Temperature</span>
+                <input type="range" id="temperature-slider" min="-20" max="120" value="70">
+                <span class="temperature-value" id="temperature-value">70°F</span>
+            </div>
+            <div class="divider">|</div>
+            <div class="feels-like">
+                <span>Feels like</span>
+                <div class="temp-value" id="feels-like-value">68°F</div>
+            </div>
+            <div class="divider">|</div>
+            <div class="hourly-weather">
+                <div id="hourly-container">
+
+                </div>
+                <button id="arrow-left" class="arrow-btn" disabled>←</button>
+                <button id="arrow-right" class="arrow-btn">→</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <div id="weather-background">
+            <h1>Movie Recommendations Based on the Weather</h1>
+            <button id="view-data-btn">View Data</button>
+            <button id="view-data-btn-2">View Genre Popularity</button>
+            <div id="additional-content" class="hidden">
+                <button id="close-data-btn">Close</button>
+                <div id="dynamic-content"></div>
+            </div>
+        </div>
+        <div id="suggested-movies">
+            <div id="suggested-movies-content"></div>
+        </div>
+        <div id="recommended-genres"></div>
+        <div id="recommended-movies"></div>
+    </div>
+    
+    <div id="modal" class="hidden">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="modal-items">
+                <img id="modal-poster" src="" alt="">
+                <div class="movie-info">
+                    <h2>Movie Details</h2>
+                    <p><em>This is a placeholder for the tagline.</em></p>
+                    <p>This is a placeholder for movie information.</p>
+                    <p><strong>Release Year:</strong> <span id="release-year"></span></p>
+                    <p><strong>Cast:</strong> <span id="actors"></span></p>
+                    <p><strong>Director:</strong> <span id="director"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="bring-to-top">Back to Top</button>
+
+    <script src="../static/script.js"></script>
+</body>
+</html>
