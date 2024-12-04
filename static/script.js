@@ -141,108 +141,200 @@ function updateBackground(iconCode, description) {
         });
     }
 
-    // Movie Section Navigation
-    const movieRows = document.querySelectorAll('.movie-row');
-    movieRows.forEach(row => {
-        const movieContainer = row.querySelector('.movie-row-content');
-        const movieArrowLeft = row.querySelector('.arrow-left');
-        const movieArrowRight = row.querySelector('.arrow-right');
-        const genre = row.querySelector('h2').textContent.toLowerCase();
+    // recommended movies
+    fetch('/recommended-movies')
+    .then(response => response.json())
+    .then(data => {
+        const genresContainer = document.getElementById('recommended-genres');
+        const suggestedMoviesContainer = document.getElementById('suggested-movies-content');
 
-        if (movieContainer && movieArrowLeft && movieArrowRight && genre) {
-            console.log(`Fetching movies for genre: ${genre}`);
-            fetch(`/movies?genre=${genre}`)
-                .then(response => response.json())
-                .then(movieData => {
-                    console.log(`Movies for genre ${genre}:`, movieData);
-                    if (movieData.error) {
-                        console.error(movieData.error);
-                        return;
+        // Display genres and movies by genre
+        data.genres.forEach(genre => {
+            const genreSection = document.createElement('div');
+            genreSection.classList.add('movie-row');
+            genreSection.innerHTML = `
+                <h2>${genre}</h2>
+                <button class="arrow-btn arrow-left">&lt;</button>
+                <div class="movie-row-content" id="${genre}-content"></div>
+                <button class="arrow-btn arrow-right">&gt;</button>
+            `;
+            genresContainer.appendChild(genreSection);
+
+            const genreMoviesContainer = document.getElementById(`${genre}-content`);
+            data.movies_by_genre[genre].forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.classList.add('movie-card');
+                movieCard.dataset.title = movie.title;
+                movieCard.dataset.description = movie.overview;
+                movieCard.dataset.poster = movie.poster;
+                movieCard.innerHTML = `
+                    <img src="${movie.poster}" alt="${movie.title}">
+                    <div class="movie-title">${movie.title}</div>
+                `;
+                genreMoviesContainer.appendChild(movieCard);
+
+                movieCard.addEventListener('click', () => {
+                    openModal(movie.title, movie.overview, movie.poster);
+                });
+            });
+
+            // Add scrolling functionality
+            const leftArrow = genreSection.querySelector('.arrow-left');
+            const rightArrow = genreSection.querySelector('.arrow-right');
+            let currentOffset = 0;
+            const visibleMovieCount = 5;
+            const totalMovies = Math.min(30, genreMoviesContainer.children.length);
+
+            const updateMovieDisplay = () => {
+                Array.from(genreMoviesContainer.children).forEach((movie, index) => {
+                    if (index >= currentOffset && index < currentOffset + visibleMovieCount) {
+                        movie.style.display = 'block';
+                    } else {
+                        movie.style.display = 'none';
                     }
+                });
 
-                    let currentOffset = 0;
-                    const visibleMovieCount = 5;
+                leftArrow.disabled = currentOffset === 0;
+                rightArrow.disabled = currentOffset + visibleMovieCount >= totalMovies;
+            };
 
-                    const updateMovieDisplay = () => {
-                        const moviesToShow = movieData.slice(currentOffset, currentOffset + visibleMovieCount);
-                        movieContainer.innerHTML = moviesToShow.map(movie => `
-                            <div class="movie-card" data-title="${movie.title}" data-description="${movie.overview}" data-poster="${movie.poster_path}">
-                                <img src="${movie.poster_path}" alt="${movie.title}">
-                                <div>${movie.title}</div>
-                            </div>
-                        `).join('');
-
-                        movieArrowLeft.disabled = currentOffset === 0;
-                        movieArrowRight.disabled = currentOffset + visibleMovieCount >= movieData.length;
-
-                        const movieCards = movieContainer.querySelectorAll('.movie-card');
-                        movieCards.forEach(card => {
-                            card.addEventListener('click', () => {
-                                const title = card.getAttribute('data-title');
-                                const description = card.getAttribute('data-description');
-                                const poster = card.getAttribute('data-poster');
-                                console.log(`Opening modal for movie: ${title}`);
-                                openModal(title, description, poster);
-                            });
-                        });
-                    };
-
-                    movieArrowRight.addEventListener('click', () => {
-                        if (currentOffset + visibleMovieCount < movieData.length) {
-                            currentOffset += visibleMovieCount;
-                            updateMovieDisplay();
-                        }
-                    });
-
-                    movieArrowLeft.addEventListener('click', () => {
-                        if (currentOffset > 0) {
-                            currentOffset -= visibleMovieCount;
-                            updateMovieDisplay();
-                        }
-                    });
-
+            rightArrow.addEventListener('click', () => {
+                if (currentOffset + visibleMovieCount < totalMovies) {
+                    currentOffset += visibleMovieCount;
                     updateMovieDisplay();
-                })
-                .catch(error => console.error('Error fetching movies:', error));
-        }
-    });
+                }
+            });
+
+            leftArrow.addEventListener('click', () => {
+                if (currentOffset > 0) {
+                    currentOffset -= visibleMovieCount;
+                    updateMovieDisplay();
+                }
+            });
+
+            updateMovieDisplay();
+        });
+
+        // Display suggested movies
+        const suggestedSection = document.createElement('div');
+        suggestedSection.classList.add('movie-row');
+        suggestedSection.innerHTML = `
+            <h2>Suggested Movies</h2>
+            <button class="arrow-btn arrow-left">&lt;</button>
+            <div class="movie-row-content" id="suggested-content"></div>
+            <button class="arrow-btn arrow-right">&gt;</button>
+        `;
+        suggestedMoviesContainer.appendChild(suggestedSection);
+
+        const suggestedMoviesContent = document.getElementById('suggested-content');
+        data.suggested_movies.forEach(movie => {
+            const movieCard = document.createElement('div');
+            movieCard.classList.add('movie-card');
+            movieCard.dataset.title = movie.title;
+            movieCard.dataset.description = movie.overview;
+            movieCard.dataset.poster = movie.poster;
+            movieCard.innerHTML = `
+                <img src="${movie.poster}" alt="${movie.title}">
+                <div class="movie-title">${movie.title}</div>
+            `;
+            suggestedMoviesContent.appendChild(movieCard);
+
+            movieCard.addEventListener('click', () => {
+                openModal(movie.title, movie.overview, movie.poster);
+            });
+        });
+
+        // Add scrolling functionality for suggested movies
+        const leftArrowSuggested = suggestedSection.querySelector('.arrow-left');
+        const rightArrowSuggested = suggestedSection.querySelector('.arrow-right');
+        let currentOffsetSuggested = 0;
+        const visibleMovieCountSuggested = 5;
+        const totalSuggestedMovies = Math.min(30, suggestedMoviesContent.children.length);
+
+        const updateSuggestedMovieDisplay = () => {
+            Array.from(suggestedMoviesContent.children).forEach((movie, index) => {
+                if (index >= currentOffsetSuggested && index < currentOffsetSuggested + visibleMovieCountSuggested) {
+                    movie.style.display = 'block';
+                } else {
+                    movie.style.display = 'none';
+                }
+            });
+
+            leftArrowSuggested.disabled = currentOffsetSuggested === 0;
+            rightArrowSuggested.disabled = currentOffsetSuggested + visibleMovieCountSuggested >= totalSuggestedMovies;
+        };
+
+        rightArrowSuggested.addEventListener('click', () => {
+            if (currentOffsetSuggested + visibleMovieCountSuggested < totalSuggestedMovies) {
+                currentOffsetSuggested += visibleMovieCountSuggested;
+                updateSuggestedMovieDisplay();
+            }
+        });
+
+        leftArrowSuggested.addEventListener('click', () => {
+            if (currentOffsetSuggested > 0) {
+                currentOffsetSuggested -= visibleMovieCountSuggested;
+                updateSuggestedMovieDisplay();
+            }
+        });
+
+        updateSuggestedMovieDisplay();
+    })
+    .catch(error => console.error('Error fetching recommended movies:', error));
 
     // Modal functionality
     const modal = document.getElementById("modal");
-    const closeBtn = document.querySelector(".close-btn");
+const closeBtn = document.querySelector(".close-btn");
 
-    function openModal(title, description, poster) {
-        console.log(`Modal data: ${title}, ${description}, ${poster}`);
-        const moviePoster = modal.querySelector("#modal-poster");
-        const movieInfo = modal.querySelector(".movie-info");
+function openModal(title, description, poster) {
+    console.log(`Modal data: ${title}, ${description}, ${poster}`);
+    const moviePoster = modal.querySelector("#modal-poster");
+    const movieInfo = modal.querySelector(".movie-info");
 
-        if (moviePoster && movieInfo) {
-            moviePoster.src = poster;
-            moviePoster.alt = title;
-            movieInfo.innerHTML = `
-                <h2>${title}</h2>
-                <p>${description}</p>
-            `;
-            modal.classList.remove("hidden");
-        } else {
-            console.error('Modal elements not found:', {
-                moviePoster,
-                movieInfo
-            });
-        }
+    if (moviePoster && movieInfo) {
+        moviePoster.src = poster;
+        moviePoster.alt = title;
+
+        // Fetch additional movie details
+        fetch(`/movie-details?title=${encodeURIComponent(title)}`)
+            .then(response => response.json())
+            .then(details => {
+                const { release_year, tagline, genres, actors, director } = details;
+                const genresList = genres.join(", ");
+                const actorsList = actors.map(actor => actor.name).join(", ");
+                const directorName = director ? director.name : "N/A";
+
+                movieInfo.innerHTML = `
+                    <h2>${title}</h2>
+                    ${tagline ? `<p><em>—— ${tagline}</em></p>` : ''}
+                    <p>${description}</p>
+                    <p><strong>Release Year:</strong> ${release_year || 'N/A'}</p>
+                    <p><strong>Genres:</strong> ${genresList || 'N/A'}</p>
+                    <p><strong>Cast:</strong> ${actorsList || 'N/A'}</p>
+                    <p><strong>Director:</strong> ${directorName}</p>
+                `;
+                modal.classList.remove("hidden");
+            })
+            .catch(error => console.error('Error fetching movie details:', error));
+    } else {
+        console.error('Modal elements not found:', {
+            moviePoster,
+            movieInfo
+        });
     }
+}
 
-    if (modal) {
-        // Close modal on close button click or clicking outside the modal
-        closeBtn?.addEventListener("click", () => {
+if (modal) {
+    // Close modal on close button click or clicking outside the modal
+    closeBtn?.addEventListener("click", () => {
+        modal.classList.add("hidden");
+    });
+    modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
             modal.classList.add("hidden");
-        });
-        modal.addEventListener("click", (e) => {
-            if (e.target === modal) {
-                modal.classList.add("hidden");
-            }
-        });
-    }
+        }
+    });
+}
 
     // Back to Top Button
     const backToTopButton = document.querySelector('.bring-to-top');

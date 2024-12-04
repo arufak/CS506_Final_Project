@@ -1,13 +1,14 @@
 from flask import Flask, render_template, jsonify, request
-import numpy as np
-import matplotlib
+import pandas as pd
 import requests
-import pycountry
 
 app = Flask(__name__)
 
 api_key_weather = 'aef5b02291330e9c41692e83d46e6c73'
 api_key_movie = '013b31dd3339a724725d88524cfb37ba'
+
+# Load the CSV file
+df = pd.read_csv('data/data_weather_mapped.csv')
 
 @app.route('/')
 def home():
@@ -15,9 +16,7 @@ def home():
 
 @app.route('/weather')
 def get_weather():
-    country_name = "United States"
-    country = pycountry.countries.get(name=country_name)
-    country_code = country.alpha_2
+    country_code = "US"
     zip_code = '02215'
 
     url_location = f'http://api.openweathermap.org/geo/1.0/zip?zip={zip_code},{country_code}&appid={api_key_weather}'
@@ -39,9 +38,7 @@ def get_weather():
 
 @app.route('/hourly-weather')
 def get_hourly_weather():
-    country_name = "United States"
-    country = pycountry.countries.get(name=country_name)
-    country_code = country.alpha_2
+    country_code = "US"
     zip_code = '02134'
 
     url_location = f'http://api.openweathermap.org/geo/1.0/zip?zip={zip_code},{country_code}&appid={api_key_weather}'
@@ -90,14 +87,27 @@ def get_movie_details(title):
         search_data = search_response.json()
         if search_data["results"]:
             movie_id = search_data["results"][0]["id"]
-            credits_url = f"https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key={api_key_movie}"
-            credits_response = requests.get(credits_url)
-            if credits_response.status_code == 200:
-                credits_data = credits_response.json()
-                actors = [{"name": actor["name"]} for actor in credits_data["cast"][:5]]
-                director = next((member for member in credits_data["crew"] if member["job"] == "Director"), None)
-                return {"actors": actors, "director": {"name": director["name"]} if director else None}
-    return {"actors": [], "director": None}
+            movie_details_url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={api_key_movie}"
+            movie_details_response = requests.get(movie_details_url)
+            if movie_details_response.status_code == 200:
+                movie_details_data = movie_details_response.json()
+                release_year = movie_details_data.get("release_date", "").split("-")[0]
+                tagline = movie_details_data.get("tagline", "")
+                genres = [genre["name"] for genre in movie_details_data.get("genres", [])]
+                credits_url = f"https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key={api_key_movie}"
+                credits_response = requests.get(credits_url)
+                if credits_response.status_code == 200:
+                    credits_data = credits_response.json()
+                    actors = [{"name": actor["name"]} for actor in credits_data["cast"][:5]]
+                    director = next((member for member in credits_data["crew"] if member["job"] == "Director"), None)
+                    return {
+                        "release_year": release_year,
+                        "tagline": tagline,
+                        "genres": genres,
+                        "actors": actors,
+                        "director": {"name": director["name"]} if director else None
+                    }
+    return {"release_year": None, "tagline": "", "genres": [], "actors": [], "director": None}
 
 @app.route('/genres')
 def get_genres():
@@ -133,6 +143,81 @@ def movie_details():
         return jsonify(details)
     else:
         return jsonify({'error': 'Title not provided'}), 400
-    
+
+def get_current_weather():
+    country_code = "US"
+    zip_code = '02215'
+
+    url_location = f'http://api.openweathermap.org/geo/1.0/zip?zip={zip_code},{country_code}&appid={api_key_weather}'
+    response_location = requests.get(url_location)
+    if response_location.status_code == 200:
+        data_location = response_location.json()
+        latitude = data_location["lat"]
+        longitude = data_location["lon"]
+
+        url = f'https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={api_key_weather}&units=imperial'
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            return data['weather'][0]['main']  # Return the main weather condition
+        else:
+            return None
+    else:
+        return None
+
+def get_movies_by_weather(weather):
+    filtered_df = df[df['Weather'].str.contains(weather, case=False, na=False)]
+    filtered_df = filtered_df[filtered_df['poster'].notna() & (filtered_df['poster'] != '')]  # Filter out rows where 'poster' is NaN or empty
+    return filtered_df
+
+def get_popular_genres(filtered_df):
+    genres_series = filtered_df['genres'].str.strip("[]").str.replace("'", "").str.split(', ')
+    genres = genres_series.explode().value_counts().index.tolist()
+    return genres[:5]  # Return the top 5 genres
+
+@app.route('/recommended-movies')
+def recommended_movies():
+    weather = get_current_weather()
+    if weather:
+        filtered_df = get_movies_by_weather(weather)
+        popular_genres = get_popular_genres(filtered_df)
+
+        # Get movies for the popular genres
+        genre_movies = {}
+        added_movies = set()  # Keep track of added movies
+
+        for genre in popular_genres:
+            genre_movies[genre] = []
+            genre_df = filtered_df[filtered_df['genres'].str.contains(genre, case=False, na=False)]
+            for _, movie in genre_df.iterrows():
+                if movie['title'] not in added_movies:
+                    genre_movies[genre].append(movie.to_dict())
+                    added_movies.add(movie['title'])
+
+        # Handle NaN values before converting to JSON
+        for genre, movies in genre_movies.items():
+            for movie in movies:
+                for key, value in movie.items():
+                    if pd.isna(value):
+                        movie[key] = None
+
+        # Handle NaN values in suggested movies
+        suggested_movies = filtered_df.sample(n=30, random_state=1).to_dict('records')
+        for movie in suggested_movies:
+            for key, value in movie.items():
+                if pd.isna(value):
+                    movie[key] = None
+
+        # Sort suggested movies by popularity
+        suggested_movies.sort(key=lambda x: x.get('popularity', 0), reverse=True)
+
+        return jsonify({
+            'genres': popular_genres,
+            'movies_by_genre': genre_movies,
+            'suggested_movies': suggested_movies
+        })
+    else:
+        return jsonify({'error': 'Failed to fetch current weather'}), 500
+
 if __name__ == "__main__":
     app.run(debug=True)

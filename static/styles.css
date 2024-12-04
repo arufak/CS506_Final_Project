@@ -112,28 +112,33 @@ body {
 .movie-card {
     flex: 1 0 calc(20% - 10px); 
     background-color: #555;
-    height: 400px; /* Increased height */
+    height: 400px; 
     text-align: center;
     border-radius: 10px;
     cursor: pointer;
     color: white;
-    overflow: hidden; /* Ensure content doesn't overflow */
+    overflow: hidden; 
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    position: relative; 
 }
 
 .movie-card img {
     width: 100%;
     height: auto;
-    max-height: 100%; /* Ensure the image fits within the card */
-    object-fit: cover; /* Ensure the image covers the card without distortion */
+    max-height: 100%; 
+    object-fit: cover; 
 }
 
 .movie-card div {
     padding: 10px;
     background: rgba(0, 0, 0, 0.7);
     width: 100%;
+    position: absolute;
+    bottom: 0; 
+    left: 0; 
+    box-sizing: border-box; 
 }
 
 .movie-card:hover {
@@ -187,34 +192,75 @@ body {
 }
 
 .modal-content {
-    background-color: white;
-    color: black;
+    background-color: #11131f;
+    color: white;
     width: 65%;
     padding: 20px;
     border-radius: 8px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .modal-items {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
-    padding: 0.5% 2%;
-}
-
-.movie-poster {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    gap: 20px;
 }
 
 #modal-poster {
     width: 100%;
     height: auto;
-    max-width: 400px; /* Adjusted size */
-    max-height: 600px; /* Adjusted size */
+    max-width: 300px;
+    border-radius: 10px;
     object-fit: cover;
+}
+
+/* .movie-poster {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+
+.movie-info h2 {
+    font-size: 2rem;
+    margin: 0;
+}
+
+.movie-info em {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.movie-info p {
+    margin: 0;
+    font-size: 1rem;
+    padding-top: 1%;
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%;
+        padding: 10px;
+    }
+
+    #modal-poster {
+        max-width: 200px;
+    }
+
+    .movie-info h2 {
+        font-size: 1.5rem;
+    }
+
+    .movie-info em {
+        font-size: 1rem;
+    }
+
+    .movie-info p {
+        font-size: 0.9rem;
+    }
 }
 
 @media (max-width: 1200px) {
@@ -252,12 +298,6 @@ body {
     }
 }
 
-.movie-info {
-    flex: 1;
-    margin-left: 2%;
-    padding: 0 1%;
-}
-
 .hidden {
     display: none;
 }
@@ -266,8 +306,9 @@ body {
     position: absolute;
     top: 10px;
     right: 15px;
-    font-size: 20px;
+    font-size: 28px;
     cursor: pointer;
+    color: white;
 }
 
 .bring-to-top {
