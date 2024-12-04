@@ -128,7 +128,7 @@ function updateBackground(iconCode, description) {
     const timeOfDay = iconCode.endsWith('d') ? 'Day' : 'Night';
     const weatherCondition = description.split(' ')[0]; // Get the first word of the description
 
-    const backgroundImage = images[weatherCondition] || images.Default;
+    const backgroundImage = images[weatherCondition] || images.default;
     weatherBackground.style.backgroundImage = `url(${backgroundImage})`;
 }
 
