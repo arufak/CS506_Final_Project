@@ -1,14 +1,16 @@
 from flask import Flask, render_template, jsonify, request
 import pandas as pd
 import requests
+import gzip
 
 app = Flask(__name__)
 
 api_key_weather = 'aef5b02291330e9c41692e83d46e6c73'
 api_key_movie = '013b31dd3339a724725d88524cfb37ba'
 
-# Load the CSV file
-df = pd.read_csv('data/data_weather_mapped.csv')
+# Load the compressed CSV file with the correct encoding
+with gzip.open('data/data_weather_mapped.csv.gz', 'rt', encoding='utf-8') as f:
+    df = pd.read_csv(f)
 
 @app.route('/')
 def home():
