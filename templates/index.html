@@ -28,7 +28,7 @@
             <div class="divider">|</div>
             <div class="hourly-weather">
                 <div id="hourly-container">
-                    <!-- Hourly weather items will be dynamically inserted here -->
+
                 </div>
                 <button id="arrow-left" class="arrow-btn" disabled>←</button>
                 <button id="arrow-right" class="arrow-btn">→</button>
@@ -36,42 +36,15 @@
         </div>
     </div>
 
-    <!-- <div id="main-content">
-        <div id="weather-background">
-            <h1>Movie Recommendations Based on the Weather</h1>
-        </div>
-        <div class="movie-row">
-            <h2>Mystery</h2>
-            <button class="arrow-btn arrow-left" id="weather-left">&lt;</button>
-            <div class="movie-row-content"></div>
-            <button class="arrow-btn arrow-right" id="weather-right">&gt;</button>
-        </div>
-        
-        <div class="movie-row">
-            <h2>Thriller</h2>
-            <button class="arrow-btn arrow-left" id="thriller-left" disabled>&lt;</button>
-            <div class="movie-row-content"></div>
-            <button class="arrow-btn arrow-right" id="thriller-right">&gt;</button>
-        </div>
-        
-        <div class="movie-row">
-            <h2>Drama</h2>
-            <button class="arrow-btn arrow-left" id="drama-left" disabled>&lt;</button>
-            <div class="movie-row-content"></div>
-            <button class="arrow-btn arrow-right" id="drama-right">&gt;</button>
-        </div>
-        
-        <div class="movie-row">
-            <h2>Comedy</h2>
-            <button class="arrow-btn arrow-left" id="comedy-left" disabled>&lt;</button>
-            <div class="movie-row-content"></div>
-            <button class="arrow-btn arrow-right" id="comedy-right">&gt;</button>
-        </div>
-    </div> -->
-
     <div id="main-content">
         <div id="weather-background">
             <h1>Movie Recommendations Based on the Weather</h1>
+            <button id="view-data-btn">View Data</button>
+            <button id="view-data-btn-2">View Genre Popularity</button>
+            <div id="additional-content" class="hidden">
+                <button id="close-data-btn">Close</button>
+                <div id="dynamic-content"></div>
+            </div>
         </div>
         <div id="suggested-movies">
             <div id="suggested-movies-content"></div>

@@ -343,4 +343,52 @@ if (modal) {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
+
+    // View Data Visualizations
+    const viewDataBtn = document.getElementById('view-data-btn');
+    const viewDataBtn2 = document.getElementById('view-data-btn-2');
+    const closeDataBtn = document.getElementById('close-data-btn');
+    const additionalContent = document.getElementById('additional-content');
+    const dynamicContent = document.getElementById('dynamic-content');
+
+    const loadContent = (url) => {
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                dynamicContent.innerHTML = data;
+                additionalContent.classList.remove('hidden');
+                viewDataBtn.classList.add('hidden');
+                viewDataBtn2.classList.add('hidden');
+
+                // Execute any scripts in the loaded HTML
+                const scripts = dynamicContent.querySelectorAll('script');
+                scripts.forEach(script => {
+                    const newScript = document.createElement('script');
+                    newScript.textContent = script.textContent;
+                    document.body.appendChild(newScript);
+                    document.body.removeChild(newScript);
+                });
+            })
+            .catch(error => console.error('Error loading HTML content:', error));
+    };
+
+    viewDataBtn.addEventListener('click', () => {
+        loadContent('/load-html/predicted_sunburst_chart.html');
+    });
+
+    viewDataBtn2.addEventListener('click', () => {
+        loadContent('/load-html/predicted_interactive_genre_popularity_radar_chart.html');
+    });
+
+    closeDataBtn.addEventListener('click', () => {
+        additionalContent.classList.add('hidden');
+        viewDataBtn.classList.remove('hidden');
+        viewDataBtn2.classList.remove('hidden');
+        dynamicContent.innerHTML = ''; // Clear the content when closing
+    });
 });

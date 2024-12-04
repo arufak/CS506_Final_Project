@@ -218,6 +218,10 @@ def recommended_movies():
         })
     else:
         return jsonify({'error': 'Failed to fetch current weather'}), 500
+    
+@app.route('/load-html/<filename>')
+def load_html(filename):
+    return render_template(filename)
 
 if __name__ == "__main__":
     app.run(debug=True)
