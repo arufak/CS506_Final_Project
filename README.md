@@ -11,8 +11,47 @@
 - **Kaiyue Shen** - Data Scientist (kaiyue18@bu.edu)
 - **Temima Muskin** - Data Visualization Specialist (tsmuskin@bu.edu)
 
+## Project Overview
+This project develops a movie recommendation system that adapts to weather conditions. By leveraging weather data from the OpenWeather API and movie data from the TMDB API, the system dynamically suggests movies that align with specific weather patterns. The project demonstrates the entire data science lifecycle, focusing on:
+
+- **Data Collection and Cleaning**: Creating a structured, high-quality dataset.
+- **Feature Engineering and Reduction**: Selecting the most impactful features.
+- **Model Development and Evaluation**: Applying and refining multiple recommendation models.
+- **User Experience**: Designing a user-friendly interface with actionable insights.
+- **Documentation and Reproducibility**: Ensuring a well-documented repository and workflows.
+
 ## Project Goals
 The goal of this project is to develop a movie recommendation system that dynamically suggests movies based on current weather conditions. The recommendation system will combine weather data from OpenWeather API with movie data from The Movie Database (TMDB) API to generate movie recommendations tailored to weather patterns. The project will practice the full data science lifecycle, incorporating data collection, data cleaning, feature extraction, visualization, and model training, while also maintaining a well-organized GitHub repository with proper documentation and testing workflow.
+
+## How to Run the Application
+
+### Prerequisites
+Ensure that you have the following installed on your system:
+- **Python 3.8+**
+- **pip** (Python package manager)
+- **Make** (optional but recommended for managing commands)
+
+### Steps to Run
+1. **Clone the Repository**
+   ```bash
+   git clone <repository-url>
+   cd <repository-folder>
+
+2. **Install Dependencies**
+   ```bash
+   make install
+   python3 -m venv venv . venv/bin/activate && pip install -r requirements.txt
+
+
+3. **Run the Application**
+   ```bash
+   make run
+   . venv/bin/activate && FLASK_APP=app.py flask run --host=0.0.0.0 --port=3000
+
+4. **Clean Up (Optional)**
+   ```bash
+   make clean
+   rm -rf venv
 
 ## Data Collection
 - **Weather Data**: Collected from the OpenWeather API, which provides real-time weather information such as temperature, humidity, and weather conditions (e.g., rainy, sunny, cloudy).
@@ -67,6 +106,39 @@ The goal of this project is to develop a movie recommendation system that dynami
 - **Weather Features**: Weather conditions such as "rainy", "sunny", "snowy", "cloudy", and temperature ranges will be extracted and categorized for use in the recommendation model.
 - **Movie Features**: Movies will be grouped based on genre, popularity, and viewer ratings to associate specific movies with weather conditions.
 
+## Data Updates
+
+### Scraping TMDB API
+- A custom scraping script queried the TMDB API with weather-related keywords (e.g., "sunny," "rainy") to gather movie data.
+- Collected details include movie title, overview, genres, popularity, vote average, production companies, and more.
+
+### Dataset: `MoviesWithWeatherV3.csv`
+- **Size**: Approximately 10,000 movies.
+- **Contents**:
+  - Movie metadata such as `title`, `overview`, `genres`, `actors`, `directors`.
+  - Weather mappings based on the query keywords used during scraping.
+- **Challenges**:
+  - TMDB keyword relevance declined after a certain point, limiting the dataset size.
+  - Some fields (e.g., producer, cinematographer) were too sparse for analysis and were dropped.
+
+### Preprocessing Steps
+1. **Missing and Invalid Values**:
+   - Handled missing values (`NaN`, `Null`, empty strings) by imputing defaults or removing rows.
+   - Filled numerical fields (e.g., `runtime`, `vote_average`) with median values where applicable.
+2. **Text Vectorization**:
+   - Used TF-IDF to vectorize text fields (`title`, `overview`, `keywords`, `production companies`, `tagline`).
+3. **One-Hot Encoding**:
+   - Encoded categorical fields like `actors`, `directors`, and `genres` for model compatibility.
+4. **Feature Reduction**:
+   - Applied Lasso regression to reduce features from ~2,500 to ~300 while retaining critical information.
+5. **Consistency**:
+   - Standardized all text fields and ensured uniform data types across columns.
+
+### Final Dataset
+- **Training Data**: Contains ~300 features post-reduction, optimized for model training.
+- **Recommendation Data**: Includes additional fields (`title`, `popularity`, `vote_average`) for user-facing recommendations.
+- **Stored Models**: Preprocessing models (e.g., vectorizers, one-hot encoders) saved as Pickle files in the `data_processing/` directory for consistent application to new data.
+
 ## Preliminary Visualizations of Data
 ### Weather Influence on Genre Choice  
 - **Visualization**: This pie chart answers the question, “Does the weather affect what genre of movie you watch?” The chart provides a clear breakdown, showing the percentage of individuals who consider weather when choosing a movie genre versus those who do not.  
@@ -93,7 +165,7 @@ The goal of this project is to develop a movie recommendation system that dynami
   
       ![lightning](/images/storm_bar_graph.png)  
 
-- **Insight**: These visualizations suggest that weather conditions may correlate with certain genre preferences, helping identify trends that could support a recommendation model based on real-time weather.  
+- **Insight**: These visualizations suggest that weather conditions may correlate with certain genre preferences, helping identify trends that could support a recommendation model based on real-time weather.
 
 ### Genre Count by Release Month  
 - **Visualization**: A bar graph shows the count of movie releases by genre for each month, providing insight into seasonal trends. For example, family movies may peak in December, aligning with holiday releases, or summer action blockbusters might see more releases around mid-year.  
@@ -107,7 +179,21 @@ The goal of this project is to develop a movie recommendation system that dynami
 - **Insight**: Data filtering and date analysis ensure clean, relevant data, enabling an exploration of time-based trends in movie genres. This can help in predicting popular genres throughout the year. However, since we only have the release date of these movies, and not the date of when users are watching at home, we cannot rely too heavily on the date since it only tells us when the movie was released (and consequently when it was in theaters).  
 - We created multiple graphs that compare the release date with other information from the movie data, below is an example of one of those graphs, where we are comparing the release date month by the total vote count. 
   
-  ![genre count per month](images/vote_count_by_month.png) 
+  ![genre count per month](images/vote_count_by_month.png)
+
+## Visualizations and Analysis
+
+### Survey Feedback Visualizations
+- **Location**: `images/form/`.
+- **Description**: Include genre preferences for various weather conditions and overall user trends.
+
+### Model Output Visualizations
+- **Location**: `images/predicted/`.
+- **Description**: Include cluster distributions, genre-weather mappings, and recommendation breakdowns.
+
+### Interactive Visuals
+- **Location**: `html/`.
+- **Description**: Allow dynamic exploration of model outputs and user preferences.
    
 ## Data Modeling Methods
 ### Clustering Model: K-Means
@@ -160,6 +246,36 @@ The goal of this project is to develop a movie recommendation system that dynami
 
 - **Ensemble Approach**: The ensemble method, combining outputs from all three models, provides robust recommendations that align well with each weather condition.
   - **Result**: This blended approach ensures high-quality recommendations by leveraging the strengths of each individual model.
+ 
+## Model Updates
+
+### K-Means Clustering
+- **Initial Attempt**: Training on all ~300 features resulted in imbalanced clusters and overlapping weather types.
+- **Current Approach**:
+  - Reduced features to the top 50 based on frequency and relevance to weather and genre.
+  - Simplified weather categories to six: Sunny, Cloudy, Rainy, Thunderstorm, Snow, Mist.
+  - Dropped sparse weather types (e.g., Scattered Clouds, Mist) for separate modeling.
+- **Outcome**: Clusters now align more closely with genre preferences for each weather type, as supported by survey feedback.
+
+### Collaborative Filtering
+- **Technique**: Nearest Neighbors with cosine similarity.
+- **Process**:
+  - Representative movies selected for each weather type based on genre relevance.
+  - Model recommends movies similar to the representative movie for a given weather condition.
+- **Outcome**: Recommendations align well with mood-based weather associations (e.g., comedies for sunny days, dramas for rainy days).
+
+### Matrix Factorization (NMF)
+- **Purpose**: To uncover latent patterns in movie genres and weather associations.
+- **Method**:
+  - Applied NMF to the genre matrix, extracting 10 latent components.
+  - Components map to weather-related attributes (e.g., adventure for sunny, thrillers for stormy).
+- **Outcome**: Provides additional insights into genre-weather relationships, complementing other models.
+
+### Ensemble Recommendation
+- **Strategy**: Combine outputs from all models to ensure robust and accurate recommendations.
+- **Aggregation**: Movies appearing in multiple model outputs receive higher priority.
+- **Outcome**: Generates high-quality recommendations tailored to specific weather conditions.
+
 
 ## Test Plan
 We plan to split our dataset into training (80%) and test (20%) sets. This approach will allow us to test the recommendation system's performance on unseen data and tune the model based on the results. The model will be evaluated using accuracy metrics and user feedback (if applicable) on movie recommendations for varying weather conditions.
@@ -195,6 +311,29 @@ We plan to split our dataset into training (80%) and test (20%) sets. This appro
 - **October 1**: Form groups, submit proposals, and create a GitHub repository.
 - **November 5**: Submit midterm report, including data collection progress, preliminary results from the recommendation model, and initial visualizations.
 - **December 10**: Submit final report, complete with final results, polished visualizations, detailed project documentation, and a functional recommendation system hosted online.
+
+## Challenges and Next Steps
+
+### Challenges
+- **Large File Management**: GitHub LFS failed for large datasets; files stored in Google Drive.
+- **Keyword Relevance**: Limited dataset size due to diminishing keyword relevance in scraping.
+- **Cluster Imbalance**: Weather types like Mist and Scattered Clouds dominate data distribution, skewing results.
+
+### Next Steps
+1. Expand movie dataset by scraping additional random movies for a broader training set.
+2. Refine clustering approach to address imbalance and improve feature relevance.
+3. Test front-end integration and align outputs with survey feedback.
+4. Explore additional weather-related features (e.g., time of day, season) for future iterations.
+
+## Collaboration Notes
+
+- **Final Model**: Integrates all three approaches (K-Means, Nearest Neighbors, NMF) into `data_weather_mapped.csv`.
+- **Graph Contributions**:
+  - Model data graphs under `images/predicted/`.
+  - Survey feedback graphs under `images/form/`.
+- **Integration Challenges**:
+  - Front-end alignment for displaying recommendations.
+  - Ensuring consistency between training and unseen datasets using saved preprocessing models.
 
 ## Conclusion
 This project will provide a complete walkthrough of the data science lifecycle, allowing the team to gain practical experience in data collection, modeling, visualization, and front-end development. The Movie Recommendation System will not only generate relevant movie suggestions based on weather conditions but also showcase the power of combining data from different sources to enhance user experience.
