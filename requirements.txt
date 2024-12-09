@@ -7,3 +7,5 @@ pandas
 seaborn
 pycountry
 importnb
+pytest
+gunicorn
