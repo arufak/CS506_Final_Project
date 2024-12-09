@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Hourly Weather Slider
     const weatherIcon = document.querySelector('.weather-icon');
     const weatherDescription = document.getElementById('weather-description');
-    const temperatureSlider = document.getElementById('temperature-slider');
+    // const temperatureSlider = document.getElementById('temperature-slider');
     const temperatureValue = document.getElementById('temperature-value');
     const feelsLikeValue = document.getElementById('feels-like-value');
     const hourlyContainer = document.getElementById('hourly-container');
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const simplifiedDescription = simplifyWeatherDescription(weather.description);
             weatherIcon.textContent = getWeatherIcon(weather.icon);
             weatherDescription.textContent = `The weather is ${simplifiedDescription} in Boston, MA`;
-            temperatureSlider.value = main.temp;
+            // temperatureSlider.value = main.temp;
             temperatureValue.textContent = `${main.temp.toFixed(2)}°F`;
             feelsLikeValue.textContent = `${main.feels_like.toFixed(2)}°F`;
 
@@ -132,14 +132,14 @@ function updateBackground(iconCode, description) {
     weatherBackground.style.backgroundImage = `url(${backgroundImage})`;
 }
 
-    // Temperature Slider
-    const tempSlider = document.querySelector('.temperature-slider input');
-    const tempValue = document.querySelector('.temperature-value');
-    if (tempSlider && tempValue) {
-        tempSlider.addEventListener('input', () => {
-            tempValue.textContent = `${tempSlider.value}°F`;
-        });
-    }
+    // // Temperature Slider
+    // const tempSlider = document.querySelector('.temperature-slider input');
+    // const tempValue = document.querySelector('.temperature-value');
+    // if (tempSlider && tempValue) {
+    //     tempSlider.addEventListener('input', () => {
+    //         tempValue.textContent = `${tempSlider.value}°F`;
+    //     });
+    // }
 
     // recommended movies
     fetch('/recommended-movies')
