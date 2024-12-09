@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, send_from_directory
 import pandas as pd
 import requests
 import gzip
@@ -223,7 +223,7 @@ def recommended_movies():
     
 @app.route('/load-html/<filename>')
 def load_html(filename):
-    return render_template(filename)
+    return send_from_directory('html', filename)
 
 if __name__ == "__main__":
     app.run(debug=True)
