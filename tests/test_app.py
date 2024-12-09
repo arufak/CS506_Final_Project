@@ -37,3 +37,11 @@ def test_recommended_movies(client):
     assert 'genres' in response.json
     assert 'movies_by_genre' in response.json
     assert 'suggested_movies' in response.json
+
+def test_invalid_weather_route(client):
+    """Test invalid weather data."""
+    response = client.get('/weather?zip=99999')  # Invalid ZIP code
+    assert response.status_code == 400  # Now expecting a 400 Bad Request
+    assert 'error' in response.json
+    assert response.json['error'] == 'Invalid ZIP code'
+
