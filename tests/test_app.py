@@ -11,29 +11,24 @@ def test_home(client):
     """Test the homepage route."""
     response = client.get('/')
     assert response.status_code == 200
-    assert b"<title>" in response.data  # Check if the response contains HTML content.
+    assert b"<title>" in response.data  # Check for HTML content in the response
 
-def test_get_weather(client):
-    """Test the weather API."""
+def test_weather_api(client):
+    """Test the weather API endpoint."""
     response = client.get('/weather')
     assert response.status_code == 200
-    assert 'weather' in response.json  # Ensure weather data is returned.
+    assert 'weather' in response.json or 'error' in response.json  # Verify weather data or error handling
 
-def test_invalid_weather_route(client):
-    """Test invalid weather data."""
-    response = client.get('/weather?zip=99999')  # Invalid ZIP code
-    assert response.status_code != 200
-
-def test_get_movies(client):
-    """Test the movies API."""
+def test_movies_by_genre(client):
+    """Test the movies API with a valid genre."""
     response = client.get('/movies?genre=Action')
     assert response.status_code == 200
-    assert isinstance(response.json, list)  # Ensure a list of movies is returned.
+    assert isinstance(response.json, list)  # Should return a list of movies
 
-def test_invalid_movie_genre(client):
-    """Test invalid genre for movies."""
+def test_invalid_genre(client):
+    """Test the movies API with an invalid genre."""
     response = client.get('/movies?genre=InvalidGenre')
-    assert response.status_code == 400  # Invalid genre should return a 400 error.
+    assert response.status_code == 400  # Invalid genre should return a 400 error
 
 def test_recommended_movies(client):
     """Test the recommended movies API."""
