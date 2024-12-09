@@ -235,5 +235,3 @@ plot_radar_chart(final_df)
 plot_sunburst_chart(final_df)
 plot_avg_popularity_bar(final_df)
 plot_avg_popularity_stacked_bar(final_df)
-
-
