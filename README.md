@@ -2,7 +2,8 @@
 
 # Movie Recommendation System Based on Weather
 
-## Link: https://youtu.be/tEhOgYi_vHE
+## Final Link: https://youtu.be/X0YL4Y00_-k
+## Midterm Link: https://youtu.be/tEhOgYi_vHE
 
 ## Our Team
 - **Arufa Khanom** - Product Manager (arufak@bu.edu)
