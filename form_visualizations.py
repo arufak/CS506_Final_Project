@@ -70,12 +70,13 @@ def plot_interactive_radar(data, title, filename):
         traces.append(go.Scatterpolar(r=values, theta=categories + [categories[0]], fill='toself', name=genre))
 
     fig = go.Figure(data=traces, layout=go.Layout(title=title, polar=dict(radialaxis=dict(visible=True)), showlegend=True))
-    fig.write_html(f"html/form_{filename}")
+    # plt.savefig("images/form/form_interactive_radar_chart.png", dpi=300)
+    fig.write_html(f"html/{filename}")
     fig.show()
 
 # 1. Pie chart: Does weather affect movie genre?
 weather_affect_counts = df["Does the weather affect what genre of movie you watch?"].value_counts()
-plot_pie_chart(weather_affect_counts, "Does the weather affect what genre of movie you watch?", "pie_weather_affect_genre_answers.png")
+plot_pie_chart(weather_affect_counts, "Does the weather affect what genre of movie you watch?", "pie_weather_affect_genere_answers.png")
 
 # 2. Bar chart: Genre popularity during each weather condition
 for weather in weather_columns:
@@ -94,7 +95,7 @@ plot_heatmap(genre_df, "Genre Popularity Across Weather Conditions", "genre_popu
 plot_stacked_bar(genre_df, "Stacked Bar: Genre Popularity Across Weather Conditions", "stacked_bar_chart.png")
 
 # 4. Radar chart: Genre popularity
-plot_interactive_radar(genre_df.T, "Interactive Radar Chart: Genre Popularity", "interactive_radar_chart.html")
+plot_interactive_radar(genre_df.T, "Interactive Radar Chart: Genre Popularity", "form_interactive_radar_chart.html")
 
 # 5. Sunburst chart: Weather, genre, and movie preferences
 sunburst_data = []
@@ -107,7 +108,8 @@ for weather in weather_columns:
 
 sunburst_df = pd.DataFrame(sunburst_data)
 fig = px.sunburst(sunburst_df, path=['Weather', 'Genre', 'Response'], title="Sunburst Chart: Weather, Genre, and Movie Preferences", color='Response')
-fig.write_html("html/form_sunburst_chart.html")
+fig.write_html("html/form_answers_sunburst_chart.html")
+# plt.savefig("images/form/form_answers_sunburst_chart.png", dpi=300)
 fig.show()
 
 # 6. Sankey diagram: Genre preferences across weather conditions
@@ -131,7 +133,8 @@ sankey_fig = go.Figure(data=[go.Sankey(
     link=dict(source=source_indices, target=target_indices, value=sankey_aggregated['Value'])
 )])
 sankey_fig.update_layout(title_text="Sankey Diagram: Genre Preferences Across Weather Conditions", font_size=12)
-sankey_fig.write_html("html/form_sankey_diagram.html")
+# plt.savefig("images/form/form_genre_prefrences_sankey_diagram.png", dpi=300)
+sankey_fig.write_html("html/form_genre_prefrences_sankey_diagram.html")
 sankey_fig.show()
 
 def plot_bubble_chart(df):
@@ -167,6 +170,7 @@ def plot_bubble_chart(df):
     )
 
     # Save the bubble chart
+    # plt.savefig("images/form/genre_frequency_bubble_chart.png", dpi=300)
     fig.write_html("html/form_answers_genre_frequency_bubble_chart.html")
     fig.show()
 
@@ -215,6 +219,3 @@ for weather in weather_columns:
 plot_bar_chart(genre_matrix)  # Bar Chart
 plot_pie_charts(df)  # Pie Charts
 plot_bubble_chart(df)  # Bubble Chart
-
-
-
