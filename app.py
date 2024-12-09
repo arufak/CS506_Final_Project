@@ -19,24 +19,31 @@ def home():
 @app.route('/weather')
 def get_weather():
     country_code = "US"
-    zip_code = '02215'
+    zip_code = '02215'  # Default ZIP code; replace if a query parameter is provided
+
+    if 'zip' in request.args:
+        zip_code = request.args.get('zip')
 
     url_location = f'http://api.openweathermap.org/geo/1.0/zip?zip={zip_code},{country_code}&appid={api_key_weather}'
     response_location = requests.get(url_location)
     if response_location.status_code == 200:
         data_location = response_location.json()
-        latitude = data_location["lat"]
-        longitude = data_location["lon"]
+        if "lat" in data_location and "lon" in data_location:  # Ensure valid location data
+            latitude = data_location["lat"]
+            longitude = data_location["lon"]
 
-        url = f'https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={api_key_weather}&units=imperial'
-        response = requests.get(url)
-        if response.status_code == 200:
-            data = response.json()
-            return jsonify(data)
+            url = f'https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={api_key_weather}&units=imperial'
+            response = requests.get(url)
+            if response.status_code == 200:
+                data = response.json()
+                return jsonify(data)
+            else:
+                return jsonify({'error': 'Failed to fetch weather data'}), response.status_code
         else:
-            return jsonify({'error': 'Failed to fetch weather data'}), response.status_code
+            return jsonify({'error': 'Invalid ZIP code'}), 400
     else:
         return jsonify({'error': 'Failed to fetch location data'}), response_location.status_code
+
 
 @app.route('/hourly-weather')
 def get_hourly_weather():
