@@ -39,7 +39,7 @@ Ensure that you have the following installed on your system:
    git clone <repository-url>
    cd <repository-folder>
 
-2. **Install Dependencies**
+2. **Install Dependencies** (This step takes a while, bear with us >_<)
    ```bash
    make install
    python3 -m venv venv . venv/bin/activate && pip install -r requirements.txt
