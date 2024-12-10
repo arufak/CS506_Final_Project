@@ -340,5 +340,5 @@ We plan to split our dataset into training (80%) and test (20%) sets. This appro
   - Ensuring consistency between training and unseen datasets using saved preprocessing models.
 
 ## Conclusion
-This project will provide a complete walkthrough of the data science lifecycle, allowing the team to gain practical experience in data collection, modeling, visualization, and front-end development. The Movie Recommendation System will not only generate relevant movie suggestions based on weather conditions but also showcase the power of combining data from different sources to enhance user experience.
+This project provided a complete walkthrough of the data science lifecycle, allowing the team to gain practical experience in data collection, modeling, visualization, and front-end development. The Movie Recommendation System will not only generate relevant movie suggestions based on weather conditions but also showcase the power of combining data from different sources to enhance user experience.
 
