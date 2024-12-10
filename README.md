@@ -254,9 +254,9 @@ Ensure that you have the following installed on your system:
 ### K-Means Clustering
 - **Initial Attempt**: Training on all ~300 features resulted in imbalanced clusters and overlapping weather types.
 - **Current Approach**:
-  - Reduced features to the top 50 based on frequency and relevance to weather and genre.
-  - Simplified weather categories to six: Sunny, Cloudy, Rainy, Thunderstorm, Snow, Mist.
-  - Dropped sparse weather types (e.g., Scattered Clouds, Mist) for separate modeling.
+  - Applied feature reduction using `VarianceThreshold` and `PCA`, reducing ~300 features to 70 principal components, retaining the most relevant information for clustering.
+  - Trained a K-Means model with 9 clusters, representing distinct weather types.
+  - Mapped weather types to clusters based on their frequency within each cluster, ensuring a logical alignment of genres with weather conditions.
 - **Outcome**: Clusters now align more closely with genre preferences for each weather type, as supported by survey feedback.
 
 ### Collaborative Filtering
@@ -269,15 +269,17 @@ Ensure that you have the following installed on your system:
 ### Matrix Factorization (NMF)
 - **Purpose**: To uncover latent patterns in movie genres and weather associations.
 - **Method**:
-  - Applied NMF to the genre matrix, extracting 10 latent components.
+  - Applied NMF to the genre matrix, extracting 9 latent components (one for each cluster).
   - Components map to weather-related attributes (e.g., adventure for sunny, thrillers for stormy).
 - **Outcome**: Provides additional insights into genre-weather relationships, complementing other models.
 
 ### Ensemble Recommendation
 - **Strategy**: Combine outputs from all models to ensure robust and accurate recommendations.
-- **Aggregation**: Movies appearing in multiple model outputs receive higher priority.
+- **Aggregation**: Aggregates scores for weather-to-cluster mappings, weighted by contributions from all three models, and assigns the most suitable weather type to each cluster based on the aggregated scores.
 - **Outcome**: Generates high-quality recommendations tailored to specific weather conditions.
 
+### Final Output
+- The final model takes an input of data after preprocessing and feature selection, and outputs a dataFrame with `Genres` (list of genres for each movie) and `Weather` (assigned weather type).
 
 ## Test Plan
 We plan to split our dataset into training (80%) and test (20%) sets. This approach will allow us to test the recommendation system's performance on unseen data and tune the model based on the results. The model will be evaluated using accuracy metrics and user feedback (if applicable) on movie recommendations for varying weather conditions.
